@@ -1,0 +1,991 @@
+Act as a Senior Laravel 12 Enterprise CRM Architect with 15+ years of experience.
+
+Build a production-ready IndiaMART Lead Management CRM from scratch.
+
+Technology Stack
+
+Backend
+---------
+Laravel 12
+PHP 8.3
+MySQL 8
+REST API
+Repository Pattern
+Service Pattern
+Form Request Validation
+Events
+Listeners
+Queue Jobs
+Notifications
+Policies
+Middleware
+
+Frontend
+---------
+Bootstrap 5
+AdminLTE 4
+jQuery
+Ajax
+SweetAlert2
+Select2
+DataTables (Yajra)
+Chart.js
+Bootstrap Icons
+
+Authentication
+----------------
+Laravel Breeze
+
+Authorization
+----------------
+Spatie Laravel Permission
+
+Database
+-------------
+Use Laravel Migration
+Seeder
+Factory
+
+Coding Standards
+-------------------
+SOLID Principles
+PSR-12
+Reusable Components
+Clean Code
+Repository Pattern
+Service Layer
+No duplicate code
+
+Project Name
+
+LeadCRM
+
+-----------------------------------------------------
+
+Roles
+
+Super Admin
+
+Admin
+
+Sales Manager
+
+Sales Executive
+
+Tele Caller
+
+Marketing
+
+Viewer
+
+-----------------------------------------------------
+
+Modules
+
+Dashboard
+
+Lead Management
+
+Lead Assignment
+
+Lead Follow-up
+
+Customers
+
+Companies
+
+Products
+
+Quotations
+
+Tasks
+
+Calendar
+
+Activities
+
+Email
+
+WhatsApp
+
+Reports
+
+Settings
+
+Users
+
+Roles
+
+Permissions
+
+API
+
+Notifications
+
+-----------------------------------------------------
+
+Dashboard
+
+Today's Leads
+
+Yesterday Leads
+
+Weekly Leads
+
+Monthly Leads
+
+Total Leads
+
+Pending Followups
+
+Today's Followups
+
+Won Leads
+
+Lost Leads
+
+Conversion Rate
+
+Revenue
+
+Employee Performance
+
+Lead Source Chart
+
+Lead Status Chart
+
+Recent Activities
+
+Top Sales Executive
+
+-----------------------------------------------------
+
+Lead Sources
+
+IndiaMART
+
+Website
+
+Facebook
+
+Instagram
+
+Google Ads
+
+JustDial
+
+TradeIndia
+
+Referral
+
+Manual
+
+CSV Import
+
+API
+
+-----------------------------------------------------
+
+Lead Fields
+
+Lead Number
+
+Lead Source
+
+IndiaMART Lead ID
+
+Customer Name
+
+Company Name
+
+GST Number
+
+Mobile
+
+Alternate Mobile
+
+WhatsApp
+
+Email
+
+Website
+
+Address
+
+City
+
+State
+
+Country
+
+Pincode
+
+Interested Product
+
+Category
+
+Requirement
+
+Quantity
+
+Budget
+
+Priority
+
+Status
+
+Assigned To
+
+Created By
+
+Expected Closing Date
+
+Remarks
+
+-----------------------------------------------------
+
+Lead Status
+
+New
+
+Assigned
+
+Contacted
+
+Interested
+
+Follow Up
+
+Quotation Sent
+
+Negotiation
+
+Won
+
+Lost
+
+Junk
+
+Duplicate
+
+-----------------------------------------------------
+
+Priority
+
+Low
+
+Medium
+
+High
+
+Urgent
+
+-----------------------------------------------------
+
+Customer Module
+
+Customer Profile
+
+Contact Persons
+
+Addresses
+
+GST
+
+PAN
+
+Purchase History
+
+Previous Quotations
+
+Timeline
+
+-----------------------------------------------------
+
+Quotation Module
+
+Create Quotation
+
+PDF Download
+
+Email PDF
+
+WhatsApp PDF
+
+Tax Calculation
+
+Discount
+
+Multiple Products
+
+Terms
+
+Notes
+
+-----------------------------------------------------
+
+Follow-up Module
+
+Timeline
+
+Notes
+
+Call
+
+Meeting
+
+Email
+
+WhatsApp
+
+SMS
+
+Reminder
+
+Next Follow-up
+
+Completed
+
+Missed
+
+-----------------------------------------------------
+
+Task Module
+
+Assign Task
+
+Due Date
+
+Reminder
+
+Priority
+
+Completed
+
+Pending
+
+-----------------------------------------------------
+
+Activity Timeline
+
+Lead Created
+
+Assigned
+
+Viewed
+
+Edited
+
+Call
+
+Email
+
+WhatsApp
+
+Quotation
+
+Status Changed
+
+Comment Added
+
+-----------------------------------------------------
+
+IndiaMART Integration
+
+Create IndiaMartService
+
+Use API
+
+Sync every 5 minutes
+
+Create Scheduler
+
+Avoid duplicate leads
+
+Store Raw JSON
+
+Log API Request
+
+Log API Response
+
+Retry Failed API
+
+Support Webhook
+
+-----------------------------------------------------
+
+Notifications
+
+Browser Notification
+
+Email
+
+WhatsApp
+
+SMS
+
+In-App Notification
+
+-----------------------------------------------------
+
+Search
+
+Global Search
+
+Lead Search
+
+Customer Search
+
+Mobile Search
+
+Company Search
+
+Email Search
+
+-----------------------------------------------------
+
+Filters
+
+Lead Source
+
+Status
+
+Employee
+
+Date Range
+
+Priority
+
+State
+
+City
+
+Product
+
+-----------------------------------------------------
+
+Reports
+
+Daily Lead Report
+
+Monthly Lead Report
+
+Sales Report
+
+Employee Performance
+
+Lead Conversion
+
+Lost Reason
+
+Product Report
+
+Source Report
+
+Follow-up Report
+
+Call Report
+
+Export Excel
+
+Export PDF
+
+Print
+
+-----------------------------------------------------
+
+Settings
+
+Company Profile
+
+Email SMTP
+
+SMS Gateway
+
+WhatsApp API
+
+IndiaMART API
+
+Lead Auto Assignment
+
+Working Hours
+
+Holiday List
+
+User Settings
+
+-----------------------------------------------------
+
+Database Design
+
+Create complete normalized database.
+
+Include
+
+users
+
+roles
+
+permissions
+
+companies
+
+customers
+
+products
+
+categories
+
+leads
+
+lead_products
+
+lead_followups
+
+lead_notes
+
+lead_activities
+
+lead_status_logs
+
+lead_sources
+
+lead_assignments
+
+quotations
+
+quotation_items
+
+tasks
+
+notifications
+
+attachments
+
+settings
+
+api_logs
+
+webhook_logs
+
+-----------------------------------------------------
+
+Build Migration
+
+Create Seeder
+
+Create Factory
+
+Create Model
+
+Create Repository
+
+Create Service
+
+Create Controller
+
+Create Request
+
+Create Policy
+
+Create Resource
+
+Create Routes
+
+Create Blade
+
+Create AJAX CRUD
+
+Create DataTables
+
+Create Unit Tests
+
+Create Feature Tests
+
+-----------------------------------------------------
+
+UI Requirements
+
+Professional CRM Design
+
+Responsive
+
+Bootstrap 5
+
+Dark Mode
+
+Sidebar
+
+Header
+
+Notification Dropdown
+
+Profile Dropdown
+
+Breadcrumb
+
+Quick Search
+
+Dashboard Cards
+
+Charts
+
+Timeline
+
+Modals
+
+Offcanvas
+
+Pagination
+
+Loading Spinner
+
+Skeleton Loader
+
+Toast Notifications
+
+-----------------------------------------------------
+
+Generate
+
+Folder Structure
+
+Complete Database Schema
+
+All Laravel Migrations
+
+All Models
+
+Relationships
+
+Controllers
+
+Repositories
+
+Services
+
+Validation
+
+Blade Files
+
+JavaScript
+
+Ajax
+
+Routes
+
+API
+
+Scheduler
+
+Queue Jobs
+
+Notifications
+
+Documentation
+
+Installation Guide
+
+Deployment Guide
+
+Use best Laravel 12 practices.
+
+Generate code file-by-file.
+
+Do not skip any file.
+
+Every file must be complete and production ready.
+
+Wait for my confirmation before generating the next file.
+
+
+-----------------------------------------------------
+
+IndiaMART Integration
+
+Build a complete IndiaMART Integration Module.
+
+Requirements
+
+• Create IndiaMartService.php
+• Create IndiaMartRepository.php
+• Create IndiaMartController.php
+• Create IndiaMartWebhookController.php
+• Create IndiaMartSync Command
+• Create Queue Job
+• Create API Logs
+• Create Webhook Logs
+• Create Error Logs
+
+Authentication
+
+Support IndiaMART API Authentication.
+
+Store API Credentials securely in .env
+
+INDIAMART_API_KEY=
+INDIAMART_GLUSR_ID=
+INDIAMART_ACCESS_TOKEN=
+
+Settings Module
+
+Create Admin Settings page for
+
+• API Key
+• Customer ID
+• Access Token
+• Auto Sync Enable/Disable
+• Sync Interval
+• Last Sync Time
+• Sync Status
+• Retry Count
+
+Automatic Lead Fetch
+
+Default Sync Interval = 30 Seconds
+
+The application must automatically fetch new IndiaMART leads every 30 seconds when Auto Sync is enabled.
+
+Create a background scheduler/worker that continuously runs.
+
+Flow
+
+Every 30 Seconds
+
+↓
+
+Call IndiaMART API
+
+↓
+
+Download Latest Leads
+
+↓
+
+Validate Response
+
+↓
+
+Check Duplicate Lead using IndiaMART Lead ID
+
+↓
+
+If Duplicate
+
+Skip
+
+Else
+
+Create New Lead
+
+↓
+
+Assign Sales Executive Automatically
+
+↓
+
+Create Follow-up
+
+↓
+
+Send Notification
+
+↓
+
+Update Dashboard Instantly
+
+Duplicate Detection
+
+Never import duplicate leads.
+
+Use
+
+IndiaMART Lead ID
+
+as unique identifier.
+
+Also check duplicate by
+
+Mobile Number
+
+Email
+
+Company Name
+
+if Lead ID is missing.
+
+Store Raw API Data
+
+Save complete JSON response into database.
+
+Table
+
+indiamart_raw_logs
+
+Columns
+
+id
+
+lead_id
+
+request_json
+
+response_json
+
+status
+
+created_at
+
+API Logging
+
+Log every request.
+
+Log every response.
+
+Log response time.
+
+Log API errors.
+
+Log timeout.
+
+Retry failed requests.
+
+Webhook Support
+
+If IndiaMART Webhook is available,
+
+support both
+
+Polling
+
+and
+
+Webhook
+
+Real Time Import.
+
+Background Processing
+
+Use Laravel Queue.
+
+Do not block user requests.
+
+Lead import must happen in background.
+
+Notifications
+
+On New Lead
+
+Send
+
+Browser Notification
+
+Email Notification
+
+WhatsApp Notification
+
+In-App Notification
+
+Dashboard Refresh
+
+Dashboard should auto refresh every 30 seconds.
+
+Show
+
+New Leads
+
+Pending Leads
+
+Assigned Leads
+
+Won Leads
+
+Lost Leads
+
+Without reloading page.
+
+Scheduler
+
+Create Scheduler.
+
+Create Queue Worker.
+
+Create Supervisor Configuration.
+
+Provide Linux Cron Configuration.
+
+API Failure Handling
+
+Retry 3 Times
+
+If API still fails
+
+Log Error
+
+Send Admin Notification
+
+Continue next cycle.
+
+Monitoring
+
+Dashboard should display
+
+Last Sync Time
+
+Next Sync Time
+
+API Status
+
+Total Imported Today
+
+Failed Imports
+
+Duplicate Leads Skipped
+
+Performance
+
+Optimize for
+
+100,000+
+
+Leads
+
+Do not insert duplicates.
+
+Use Bulk Insert.
+
+Use Transactions.
+
+Use Queue.
+
+Use Caching.
+
+Generate
+
+Migration
+
+Model
+
+Repository
+
+Service
+
+Queue Job
+
+Scheduler
+
+Controller
+
+API
+
+Unit Test
+
+Feature Test
+
+Documentation
+
+Installation Guide
+
+Deployment Guide
+
+Everything should follow Laravel 12 Best Practices.
