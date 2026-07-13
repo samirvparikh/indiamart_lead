@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
+use App\Models\User;
 use App\Services\TaskService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,10 @@ class TaskController extends Controller
     {
         $this->authorize('viewAny', Task::class);
 
-        return view('tasks.index');
+        return view('tasks.index', [
+            'users' => User::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
+            'customers' => \App\Models\Customer::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
+        ]);
     }
 
     public function datatable(Request $request): JsonResponse

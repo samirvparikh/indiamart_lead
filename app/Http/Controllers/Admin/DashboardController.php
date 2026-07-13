@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $this->authorize('viewAny', \App\Models\Lead::class);
 
         return view('dashboard.index', [
-            'stats' => $this->dashboardService->getStats($request->user()),
+            'console' => $this->dashboardService->getConsoleData($request->user()),
         ]);
     }
 
@@ -29,12 +29,7 @@ class DashboardController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'stats' => $this->dashboardService->getStats($request->user()),
-                'lead_source_chart' => $this->dashboardService->getLeadSourceChart(),
-                'lead_status_chart' => $this->dashboardService->getLeadStatusChart(),
-                'top_sales_executives' => $this->dashboardService->getTopSalesExecutives(),
-            ],
+            'data' => $this->dashboardService->getConsoleData($request->user()),
         ]);
     }
 }

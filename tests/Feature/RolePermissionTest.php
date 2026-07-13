@@ -43,12 +43,12 @@ class RolePermissionTest extends TestCase
     public function test_inactive_user_cannot_login(): void
     {
         $user = User::factory()->inactive()->create([
-            'email' => 'inactive@leadcrm.com',
+            'email' => 'inactive@gmail.com',
         ]);
         $user->assignRole(RoleName::Viewer->value);
 
         $response = $this->post('/login', [
-            'email' => 'inactive@leadcrm.com',
+            'email' => 'inactive@gmail.com',
             'password' => 'password',
         ]);
 

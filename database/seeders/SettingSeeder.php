@@ -12,7 +12,7 @@ class SettingSeeder extends Seeder
         $settings = [
             // Company Profile
             ['group' => 'company', 'key' => 'name', 'value' => 'LeadCRM', 'type' => 'string'],
-            ['group' => 'company', 'key' => 'email', 'value' => 'info@leadcrm.com', 'type' => 'string'],
+            ['group' => 'company', 'key' => 'email', 'value' => 'info@gmail.com', 'type' => 'string'],
             ['group' => 'company', 'key' => 'phone', 'value' => '', 'type' => 'string'],
             ['group' => 'company', 'key' => 'address', 'value' => '', 'type' => 'text'],
             ['group' => 'company', 'key' => 'gst_number', 'value' => '', 'type' => 'string'],

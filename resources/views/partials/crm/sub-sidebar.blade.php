@@ -27,6 +27,30 @@
                 ],
             ],
         ],
+        'companies' => [
+            'title' => 'Companies',
+            'groups' => [
+                'DIRECTORY' => [
+                    ['route' => 'companies.index', 'label' => 'All Companies', 'pattern' => 'companies.index'],
+                ],
+            ],
+        ],
+        'quotations' => [
+            'title' => 'Quotations',
+            'groups' => [
+                'SALES' => [
+                    ['route' => 'quotations.index', 'label' => 'All Quotations', 'pattern' => 'quotations.index'],
+                ],
+            ],
+        ],
+        'tasks' => [
+            'title' => 'Tasks',
+            'groups' => [
+                'WORKFLOW' => [
+                    ['route' => 'tasks.index', 'label' => 'All Tasks', 'pattern' => 'tasks.index'],
+                ],
+            ],
+        ],
     ];
     $menu = $menus[$module] ?? null;
 @endphp

@@ -120,13 +120,13 @@ Expected: Laravel 12.x, PHP 8.3, environment `local`.
 
 | Role | Email | Password |
 |------|-------|----------|
-| Super Admin | superadmin@leadcrm.com | password |
-| Admin | admin@leadcrm.com | password |
-| Sales Manager | manager@leadcrm.com | password |
-| Sales Executive | executive@leadcrm.com | password |
-| Tele Caller | telecaller@leadcrm.com | password |
-| Marketing | marketing@leadcrm.com | password |
-| Viewer | viewer@leadcrm.com | password |
+| Super Admin | superadmin@gmail.com | password |
+| Admin | admin@gmail.com | password |
+| Sales Manager | manager@gmail.com | password |
+| Sales Executive | executive@gmail.com | password |
+| Tele Caller | telecaller@gmail.com | password |
+| Marketing | marketing@gmail.com | password |
+| Viewer | viewer@gmail.com | password |
 
 Run seeders:
 

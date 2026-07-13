@@ -5,14 +5,10 @@
 
     <nav>
         <div class="crm-nav-section">
-            <div class="crm-nav-section-title">Overview</div>
+            <div class="crm-nav-section-title">Operations</div>
             <a href="{{ route('dashboard') }}" class="crm-nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                 <i class="bi bi-speedometer2"></i> Dashboard
             </a>
-        </div>
-
-        <div class="crm-nav-section">
-            <div class="crm-nav-section-title">Operations</div>
             @can('viewAny', App\Models\Lead::class)
                 <a href="{{ route('leads.index') }}" class="crm-nav-link {{ request()->routeIs('leads.*') ? 'active' : '' }}">
                     <i class="bi bi-funnel"></i> Leads

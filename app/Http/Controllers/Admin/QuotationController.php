@@ -19,7 +19,10 @@ class QuotationController extends Controller
     {
         $this->authorize('viewAny', Quotation::class);
 
-        return view('quotations.index');
+        return view('quotations.index', [
+            'customers' => \App\Models\Customer::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
+            'products' => \App\Models\Product::query()->where('is_active', true)->orderBy('name')->get(['id', 'name', 'price', 'tax_rate', 'unit', 'sku']),
+        ]);
     }
 
     public function datatable(Request $request): JsonResponse

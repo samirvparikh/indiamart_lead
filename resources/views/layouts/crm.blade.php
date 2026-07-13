@@ -34,5 +34,18 @@
     </div>
 
     @stack('scripts')
+    <script>
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            document.getElementById('crm-quick-find')?.focus();
+        }
+    });
+    </script>
 </body>
 </html>
