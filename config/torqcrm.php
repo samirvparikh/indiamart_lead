@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'name' => env('APP_NAME', 'TorqCRM'),
+    'name' => env('APP_NAME', 'Torq CRM'),
 
     'lead_number_prefix' => env('LEAD_NUMBER_PREFIX', 'LD'),
 

@@ -9,8 +9,10 @@ enum ActivityType: string
     case Viewed = 'Viewed';
     case Edited = 'Edited';
     case Call = 'Call';
+    case Meeting = 'Meeting';
     case Email = 'Email';
     case WhatsApp = 'WhatsApp';
+    case SMS = 'SMS';
     case Quotation = 'Quotation';
     case StatusChanged = 'Status Changed';
     case CommentAdded = 'Comment Added';

@@ -3,14 +3,18 @@
 namespace App\Services;
 
 use App\Enums\ActivityType;
+use App\Enums\FollowupStatus;
+use App\Enums\FollowupType;
 use App\Enums\LeadStatus;
 use App\Events\LeadCreated;
 use App\Events\LeadStatusChanged;
 use App\Models\Lead;
 use App\Models\LeadActivity;
+use App\Models\LeadFollowup;
 use App\Models\LeadStatusLog;
 use App\Models\Setting;
 use App\Models\User;
+use App\Support\DatatableSort;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -97,6 +101,78 @@ class LeadService
         });
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public function recordAction(Lead $lead, array $data, User $user): Lead
+    {
+        return DB::transaction(function () use ($lead, $data, $user) {
+            $lead = Lead::query()->lockForUpdate()->findOrFail($lead->id);
+            $originalStatus = $lead->status;
+
+            if ($lead->assigned_to === null) {
+                $assignee = $user->canAccessAdministration()
+                    ? User::query()->where('is_active', true)->findOrFail($data['assigned_to'])
+                    : $user;
+
+                $lead = $this->assignmentService->assign(
+                    $lead,
+                    $assignee,
+                    $user,
+                    'Assigned automatically from lead action'
+                );
+            } elseif (
+                $user->canAccessAdministration()
+                && (int) $data['assigned_to'] !== (int) $lead->assigned_to
+            ) {
+                $assignee = User::query()->where('is_active', true)->findOrFail($data['assigned_to']);
+                $lead = $this->assignmentService->assign($lead, $assignee, $user, 'Reassigned from lead action');
+            }
+
+            $requestedStatus = LeadStatus::from($data['status']);
+
+            if ($requestedStatus !== $originalStatus && $requestedStatus !== $lead->status) {
+                $lead = $this->changeStatus($lead, $requestedStatus, $user, $data['notes']);
+            }
+
+            $actionType = FollowupType::from($data['action_type']);
+            $nextFollowupAt = $data['next_followup_at'] ?? null;
+            $leadUpdates = ['last_contacted_at' => now()];
+
+            if ($nextFollowupAt) {
+                $leadUpdates['next_followup_at'] = $nextFollowupAt;
+            }
+
+            $lead->update($leadUpdates);
+
+            LeadFollowup::query()->create([
+                'lead_id' => $lead->id,
+                'type' => $actionType->value,
+                'status' => FollowupStatus::Completed->value,
+                'subject' => $actionType->value.' activity',
+                'notes' => $data['notes'],
+                'scheduled_at' => now(),
+                'completed_at' => now(),
+                'next_followup_at' => $nextFollowupAt,
+                'created_by' => $user->id,
+                'assigned_to' => $lead->assigned_to,
+            ]);
+
+            $this->logActivity(
+                $lead,
+                ActivityType::from($actionType->value),
+                $data['notes'],
+                $user,
+                [
+                    'action_type' => $actionType->value,
+                    'next_followup_at' => $nextFollowupAt,
+                ]
+            );
+
+            return $lead->fresh(['leadSource', 'assignee', 'category', 'creator']);
+        });
+    }
+
     public function delete(Lead $lead): bool
     {
         return (bool) $lead->delete();
@@ -147,9 +223,9 @@ class LeadService
 
         $this->applyFilters($query, $filters);
 
-        \App\Support\DatatableSort::apply($query, $filters, [
+        DatatableSort::apply($query, $filters, [
             'id', 'lead_number', 'customer_name', 'mobile', 'email', 'status',
-            'assigned_to', 'lead_source_id', 'created_at', 'updated_at',
+            'assigned_to', 'lead_source_id', 'next_followup_at', 'created_at', 'updated_at',
         ], 'id', 'desc');
 
         return $query->paginate($perPage);
@@ -268,6 +344,18 @@ class LeadService
 
         if (! empty($filters['date_to'])) {
             $query->whereDate('created_at', '<=', $filters['date_to']);
+        }
+
+        if (! empty($filters['has_followup'])) {
+            $query->whereNotNull('next_followup_at');
+        }
+
+        if (! empty($filters['followup_date_from'])) {
+            $query->whereDate('next_followup_at', '>=', $filters['followup_date_from']);
+        }
+
+        if (! empty($filters['followup_date_to'])) {
+            $query->whereDate('next_followup_at', '<=', $filters['followup_date_to']);
         }
 
         if (! empty($filters['assigned_only']) && ! empty($filters['user_id'])) {

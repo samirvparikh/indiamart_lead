@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Lead\AssignLeadRequest;
+use App\Http\Requests\Lead\StoreLeadActionRequest;
 use App\Http\Requests\Lead\StoreLeadRequest;
 use App\Http\Requests\Lead\UpdateLeadRequest;
 use App\Http\Resources\LeadResource;
@@ -11,9 +12,9 @@ use App\Models\Category;
 use App\Models\Lead;
 use App\Models\LeadSource;
 use App\Models\User;
+use App\Services\IndiaMartLeadSyncService;
 use App\Services\LeadAssignmentService;
 use App\Services\LeadService;
-use App\Services\IndiaMartLeadSyncService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -31,9 +32,33 @@ class LeadController extends Controller
     {
         $this->authorize('viewAny', Lead::class);
 
+        return $this->leadIndexView('all');
+    }
+
+    public function myLeads(Request $request): View
+    {
+        $this->authorize('viewAny', Lead::class);
+
+        return $this->leadIndexView('my');
+    }
+
+    public function allLeads(Request $request): View
+    {
+        $this->authorize('viewAny', Lead::class);
+
+        return $this->leadIndexView('all');
+    }
+
+    protected function leadIndexView(string $scope): View
+    {
         return view('leads.index', [
             'leadSources' => LeadSource::query()->where('is_active', true)->orderBy('sort_order')->get(),
             'users' => User::query()->where('is_active', true)->orderBy('name')->get(['id', 'name']),
+            'leadScope' => $scope,
+            'pageTitle' => $scope === 'my' ? 'My Leads' : 'All Leads',
+            'datatableRoute' => $scope === 'my'
+                ? route('leads.my.datatable')
+                : route('leads.all.datatable'),
         ]);
     }
 
@@ -41,13 +66,32 @@ class LeadController extends Controller
     {
         $this->authorize('viewAny', Lead::class);
 
+        return $this->leadDatatable($request, false);
+    }
+
+    public function myLeadsDatatable(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', Lead::class);
+
+        return $this->leadDatatable($request, true);
+    }
+
+    public function allLeadsDatatable(Request $request): JsonResponse
+    {
+        $this->authorize('viewAny', Lead::class);
+
+        return $this->leadDatatable($request, false);
+    }
+
+    protected function leadDatatable(Request $request, bool $assignedToCurrentUser): JsonResponse
+    {
         $filters = $request->only([
             'search', 'lead_source_id', 'status', 'priority',
             'assigned_to', 'state', 'city', 'date_from', 'date_to',
             'sort_by', 'sort_dir',
         ]);
 
-        if (! $request->user()->seesUnrestrictedRecords()) {
+        if ($assignedToCurrentUser) {
             $filters['assigned_only'] = true;
             $filters['user_id'] = $request->user()->id;
         }
@@ -117,10 +161,14 @@ class LeadController extends Controller
     {
         $this->authorize('view', $lead);
 
-        $lead->load(['leadSource', 'assignee', 'creator', 'category', 'activities.causer', 'followups', 'notes.creator']);
+        $lead->load(['leadSource', 'assignee', 'creator', 'category', 'followups', 'notes.creator']);
+        $lead->setRelation('activities', $lead->activities()->with('causer')->latest()->get());
 
         return view('leads.show', [
             'lead' => $lead,
+            'users' => request()->user()->canAccessAdministration()
+                ? User::query()->where('is_active', true)->orderBy('name')->get(['id', 'name'])
+                : collect(),
         ]);
     }
 
@@ -140,6 +188,17 @@ class LeadController extends Controller
             'message' => 'Lead updated successfully.',
             'data' => new LeadResource($lead),
         ]);
+    }
+
+    public function storeAction(StoreLeadActionRequest $request, Lead $lead): JsonResponse
+    {
+        $lead = $this->leadService->recordAction($lead, $request->validated(), $request->user());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Lead activity recorded successfully.',
+            'data' => new LeadResource($lead),
+        ], 201);
     }
 
     public function destroy(Lead $lead): JsonResponse

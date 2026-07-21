@@ -32,28 +32,20 @@
 
     <div class="crm-stats-grid crm-stats-grid-7">
         @foreach ([
-            'today_leads' => ['TODAY LEADS', 'bi-calendar-day', 'blue'],
-            'weekly_leads' => ['WEEKLY LEADS', 'bi-calendar-week', 'indigo'],
-            'pending_followups' => ['PENDING FOLLOWUPS', 'bi-clock-history', 'orange'],
-            'won_leads' => ['WON LEADS', 'bi-trophy', 'green'],
-            'total_leads' => ['TOTAL LEADS', 'bi-funnel', 'navy'],
-            'conversion_rate' => ['CONVERSION RATE', 'bi-graph-up-arrow', 'teal'],
-            'revenue' => ['REVENUE', 'bi-currency-rupee', 'purple'],
+            'today_leads' => ["TODAY'S LEAD", 'bi-calendar-day', 'blue'],
+            'open_leads' => ['OPEN LEAD', 'bi-folder2-open', 'indigo'],
+            'contacted_leads' => ['CONTACTED LEAD', 'bi-telephone-check', 'teal'],
+            'today_rejected_leads' => ["TODAY'S REJECTED LEAD", 'bi-x-circle', 'orange'],
+            'today_followups' => ["TODAY'S LEAD FOLLOWUP", 'bi-calendar2-check', 'green'],
+            'overdue_followups' => ['OVERDUE LEAD FOLLOWUP', 'bi-clock-history', 'purple'],
+            'unassigned_leads' => ['UNASSIGNED LEAD', 'bi-person-exclamation', 'navy'],
         ] as $key => [$label, $icon, $tone])
             <div class="crm-stat-card crm-stat-{{ $tone }}">
                 <div class="crm-stat-card-top">
                     <p>{{ $label }}</p>
                     <span class="crm-stat-icon"><i class="bi {{ $icon }}"></i></span>
                 </div>
-                <h3>
-                    @if($key === 'conversion_rate')
-                        {{ $stats[$key] ?? 0 }}%
-                    @elseif($key === 'revenue')
-                        ₹{{ number_format($stats[$key] ?? 0, 0) }}
-                    @else
-                        {{ number_format($stats[$key] ?? 0) }}
-                    @endif
-                </h3>
+                <h3>{{ number_format($stats[$key] ?? 0) }}</h3>
             </div>
         @endforeach
     </div>

@@ -15,7 +15,7 @@
 <body class="crm-auth-body">
     <div class="crm-auth-card">
         <div class="crm-auth-header">
-            <h1>@yield('auth_heading', 'Welcome Back')</h1>
+            <h1>@yield('auth_heading', 'Welcome ' . config('app.name'))</h1>
             <p>@yield('auth_subheading', 'Sign in to access your business workspace.')</p>
         </div>
         <div class="crm-auth-body-inner">

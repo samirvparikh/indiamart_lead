@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\CompanySettingController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\CompanySettingController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FollowupController;
 use App\Http\Controllers\Admin\LeadController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ProductController;
@@ -31,16 +32,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('leads')->name('leads.')->middleware('permission:leads.view')->group(function () {
         Route::get('/', [LeadController::class, 'index'])->name('index');
         Route::get('/datatable', [LeadController::class, 'datatable'])->name('datatable');
+        Route::get('/my', [LeadController::class, 'myLeads'])->name('my');
+        Route::get('/my/datatable', [LeadController::class, 'myLeadsDatatable'])->name('my.datatable');
+        Route::get('/all', [LeadController::class, 'allLeads'])->name('all');
+        Route::get('/all/datatable', [LeadController::class, 'allLeadsDatatable'])->name('all.datatable');
         Route::post('/sync-indiamart', [LeadController::class, 'syncIndiaMart'])
             ->middleware('permission:leads.create')
             ->name('sync-indiamart');
         Route::get('/create', [LeadController::class, 'create'])->middleware('permission:leads.create')->name('create');
         Route::post('/', [LeadController::class, 'store'])->middleware('permission:leads.create')->name('store');
+        Route::post('/{lead}/actions', [LeadController::class, 'storeAction'])->name('actions.store');
         Route::get('/{lead}', [LeadController::class, 'show'])->name('show');
         Route::get('/{lead}/edit', [LeadController::class, 'edit'])->middleware('permission:leads.edit')->name('edit');
         Route::put('/{lead}', [LeadController::class, 'update'])->middleware('permission:leads.edit')->name('update');
         Route::delete('/{lead}', [LeadController::class, 'destroy'])->middleware('permission:leads.delete')->name('destroy');
         Route::post('/{lead}/assign', [LeadController::class, 'assign'])->middleware('permission:leads.assign')->name('assign');
+    });
+
+    Route::prefix('followups')->name('followups.')->middleware('permission:followups.view')->group(function () {
+        Route::get('/', [FollowupController::class, 'index'])->name('index');
+        Route::get('/my', [FollowupController::class, 'myFollowups'])->name('my');
+        Route::get('/my/datatable', [FollowupController::class, 'myFollowupsDatatable'])->name('my.datatable');
+        Route::get('/all', [FollowupController::class, 'allFollowups'])->name('all');
+        Route::get('/all/datatable', [FollowupController::class, 'allFollowupsDatatable'])->name('all.datatable');
     });
 
     Route::prefix('customers')->name('customers.')->middleware('permission:customers.view')->group(function () {

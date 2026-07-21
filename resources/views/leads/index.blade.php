@@ -1,17 +1,17 @@
 @extends('layouts.crm')
 
-@section('title', 'Leads')
+@section('title', $pageTitle)
 
 @section('breadcrumb')
     <a href="{{ route('dashboard') }}">Home</a>
     <span>&rsaquo;</span>
-    <a href="{{ route('leads.index') }}">Operations</a>
-    <span>&rsaquo;</span> Leads
+    <a href="{{ route('leads.index') }}">Leads</a>
+    <span>&rsaquo;</span> {{ $pageTitle }}
 @endsection
 
 @section('toolbar')
     <div class="crm-page-title">
-        <i class="bi bi-funnel"></i> Leads
+        <i class="bi {{ $leadScope === 'my' ? 'bi-person-check' : 'bi-people' }}"></i> {{ $pageTitle }}
     </div>
     <div class="crm-toolbar-actions">
         @can('create', App\Models\Lead::class)
@@ -31,8 +31,8 @@
         <div class="crm-content-card-body">
             <div class="crm-filters">
                 <input type="text" id="lead-search" class="crm-input" placeholder="Search leads...">
-                <input type="date" id="lead-date-from" class="crm-input" value="{{ now()->toDateString() }}" title="From date">
-                <input type="date" id="lead-date-to" class="crm-input" value="{{ now()->toDateString() }}" title="To date">
+                <input type="date" id="lead-date-from" class="crm-input" title="From date">
+                <input type="date" id="lead-date-to" class="crm-input" title="To date">
                 <select id="lead-status" class="crm-input">
                     <option value="">All Status</option>
                     @foreach (App\Enums\LeadStatus::cases() as $status)
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lead_source_id: document.getElementById('lead-source').value,
         }));
 
-        const response = await fetch(`{{ route('leads.datatable') }}?${params}`, {
+        const response = await fetch(`{{ $datatableRoute }}?${params}`, {
             headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
         });
         const json = await response.json();

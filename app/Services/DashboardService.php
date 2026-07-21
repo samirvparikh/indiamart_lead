@@ -38,12 +38,30 @@ class DashboardService
 
         $wonLeads = (clone $base)->where('status', LeadStatus::Won->value)->count();
         $lostLeads = (clone $base)->where('status', LeadStatus::Lost->value)->count();
+        $openLeads = (clone $base)->active()->count();
+        $contactedLeads = (clone $base)->where('status', LeadStatus::Contacted->value)->count();
+        $todayRejectedLeads = (clone $base)
+            ->where('status', LeadStatus::Lost->value)
+            ->whereDate('lost_at', $today)
+            ->count();
+        $todayFollowups = (clone $base)
+            ->active()
+            ->whereDate('next_followup_at', $today)
+            ->count();
+        $overdueFollowups = (clone $base)
+            ->active()
+            ->whereNotNull('next_followup_at')
+            ->where('next_followup_at', '<', $today->copy()->startOfDay())
+            ->count();
+        $unassignedLeads = (clone $base)
+            ->active()
+            ->whereNull('assigned_to')
+            ->count();
         $pendingFollowups = (clone $base)->whereNotNull('next_followup_at')
             ->where('next_followup_at', '<=', now())
             ->whereNotIn('status', [LeadStatus::Won->value, LeadStatus::Lost->value, LeadStatus::Junk->value])
             ->count();
 
-        $todayFollowups = (clone $base)->whereDate('next_followup_at', $today)->count();
         $revenue = (clone $base)->where('status', LeadStatus::Won->value)->sum('won_value');
         $conversionRate = $totalLeads > 0 ? round(($wonLeads / $totalLeads) * 100, 2) : 0;
 
@@ -53,8 +71,13 @@ class DashboardService
             'weekly_leads' => $weeklyLeads,
             'monthly_leads' => $monthlyLeads,
             'total_leads' => $totalLeads,
+            'open_leads' => $openLeads,
+            'contacted_leads' => $contactedLeads,
+            'today_rejected_leads' => $todayRejectedLeads,
             'pending_followups' => $pendingFollowups,
             'today_followups' => $todayFollowups,
+            'overdue_followups' => $overdueFollowups,
+            'unassigned_leads' => $unassignedLeads,
             'won_leads' => $wonLeads,
             'lost_leads' => $lostLeads,
             'conversion_rate' => $conversionRate,

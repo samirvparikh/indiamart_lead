@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\RoleName;
 use App\Models\Lead;
 use App\Models\User;
 
@@ -45,9 +46,23 @@ class LeadPolicy
         return $user->can('leads.assign');
     }
 
+    public function recordAction(User $user, Lead $lead): bool
+    {
+        if (! $user->can('leads.edit')) {
+            return false;
+        }
+
+        if ($user->canAccessAdministration() || $user->seesUnrestrictedRecords()) {
+            return true;
+        }
+
+        return $lead->assigned_to === null
+            || (int) $lead->assigned_to === (int) $user->id;
+    }
+
     protected function canAccessLead(User $user, Lead $lead): bool
     {
-        if ($user->seesUnrestrictedRecords() || $user->hasRole(\App\Enums\RoleName::Marketing->value)) {
+        if ($user->seesUnrestrictedRecords() || $user->hasRole(RoleName::Marketing->value)) {
             return true;
         }
 

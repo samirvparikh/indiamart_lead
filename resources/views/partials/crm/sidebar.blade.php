@@ -11,9 +11,38 @@
                 <i class="bi bi-speedometer2"></i><span class="crm-nav-label">Dashboard</span>
             </a>
             @can('viewAny', App\Models\Lead::class)
-                <a href="{{ route('leads.index') }}" class="crm-nav-link {{ request()->routeIs('leads.*') ? 'active' : '' }}" title="Leads">
-                    <i class="bi bi-funnel"></i><span class="crm-nav-label">Leads</span>
-                </a>
+                <div class="crm-nav-group {{ request()->routeIs('leads.*') ? 'is-open' : '' }}">
+                    <a href="{{ route('leads.my') }}" class="crm-nav-link crm-nav-parent {{ request()->routeIs('leads.*') ? 'active' : '' }}" title="Leads">
+                        <i class="bi bi-funnel"></i>
+                        <span class="crm-nav-label">Leads</span>
+                        <i class="bi bi-chevron-down crm-nav-chevron"></i>
+                    </a>
+                    <div class="crm-nav-submenu">
+                        <a href="{{ route('leads.my') }}" class="crm-nav-submenu-link {{ request()->routeIs('leads.my*') ? 'active' : '' }}">
+                            <i class="bi bi-person-check"></i><span>My Leads</span>
+                        </a>
+                        <a href="{{ route('leads.all') }}" class="crm-nav-submenu-link {{ request()->routeIs('leads.all*') || request()->routeIs('leads.index') ? 'active' : '' }}">
+                            <i class="bi bi-people"></i><span>All Leads</span>
+                        </a>
+                    </div>
+                </div>
+            @endcan
+            @can('followups.view')
+                <div class="crm-nav-group {{ request()->routeIs('followups.*') ? 'is-open' : '' }}">
+                    <a href="{{ route('followups.my') }}" class="crm-nav-link crm-nav-parent {{ request()->routeIs('followups.*') ? 'active' : '' }}" title="Followups">
+                        <i class="bi bi-calendar2-check"></i>
+                        <span class="crm-nav-label">Followups</span>
+                        <i class="bi bi-chevron-down crm-nav-chevron"></i>
+                    </a>
+                    <div class="crm-nav-submenu">
+                        <a href="{{ route('followups.my') }}" class="crm-nav-submenu-link {{ request()->routeIs('followups.my*') || request()->routeIs('followups.index') ? 'active' : '' }}">
+                            <i class="bi bi-person-check"></i><span>My Followups</span>
+                        </a>
+                        <a href="{{ route('followups.all') }}" class="crm-nav-submenu-link {{ request()->routeIs('followups.all*') ? 'active' : '' }}">
+                            <i class="bi bi-calendar-week"></i><span>All Followups</span>
+                        </a>
+                    </div>
+                </div>
             @endcan
             @can('viewAny', App\Models\Customer::class)
                 <a href="{{ route('customers.index') }}" class="crm-nav-link {{ request()->routeIs('customers.*') ? 'active' : '' }}" title="Customers">
