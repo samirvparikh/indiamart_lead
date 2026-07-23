@@ -34,6 +34,7 @@
                     <option value="0">Inactive</option>
                 </select>
                 <button type="button" id="filter-btn" class="crm-btn crm-btn-primary-sm"><i class="bi bi-funnel"></i> Filter</button>
+                <button type="button" id="reset-btn" class="crm-btn"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
             </div>
         </div>
         <div class="crm-table-wrap">
@@ -168,6 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modal-close').addEventListener('click', closeModal);
     document.getElementById('modal-cancel').addEventListener('click', closeModal);
     document.getElementById('filter-btn').addEventListener('click', () => load(1));
+    document.getElementById('reset-btn').addEventListener('click', () => {
+        document.querySelectorAll('.crm-filters .crm-input').forEach((el) => { el.value = ''; });
+        load(1);
+    });
     document.getElementById('refresh-btn').addEventListener('click', () => load(currentPage));
     document.getElementById('pagination').addEventListener('click', e => { const b = e.target.closest('button[data-page]'); if (b) load(+b.dataset.page); });
 

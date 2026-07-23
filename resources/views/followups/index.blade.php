@@ -47,6 +47,9 @@
                 <button type="button" id="followup-filter-btn" class="crm-btn crm-btn-primary-sm">
                     <i class="bi bi-funnel"></i> Filter
                 </button>
+                <button type="button" id="followup-reset-btn" class="crm-btn">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reset
+                </button>
             </div>
         </div>
 
@@ -144,6 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tableSort.bind(tableEl, loadFollowups);
     document.getElementById('followup-filter-btn').addEventListener('click', () => loadFollowups(1));
+    document.getElementById('followup-reset-btn').addEventListener('click', () => {
+        document.querySelectorAll('.crm-filters .crm-input').forEach((el) => { el.value = ''; });
+        loadFollowups(1);
+    });
     document.getElementById('followup-refresh-btn').addEventListener('click', () => loadFollowups(currentPage));
     pagination.addEventListener('click', (event) => {
         const button = event.target.closest('button[data-page]');

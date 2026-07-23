@@ -46,6 +46,7 @@
                     @endforeach
                 </select>
                 <button type="button" id="lead-filter-btn" class="crm-btn crm-btn-primary-sm"><i class="bi bi-funnel"></i> Filter</button>
+                <button type="button" id="lead-reset-btn" class="crm-btn"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
             </div>
         </div>
 
@@ -133,6 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tableSort.bind(tableEl, loadLeads);
     document.getElementById('lead-filter-btn').addEventListener('click', () => loadLeads(1));
+    document.getElementById('lead-reset-btn').addEventListener('click', () => {
+        document.querySelectorAll('.crm-filters .crm-input').forEach((el) => { el.value = ''; });
+        loadLeads(1);
+    });
     document.getElementById('lead-refresh-btn').addEventListener('click', () => loadLeads(currentPage));
     document.getElementById('lead-sync-btn')?.addEventListener('click', async () => {
         const btn = document.getElementById('lead-sync-btn');

@@ -1430,13 +1430,34 @@ body.sidebar-collapsed .crm-nav-chevron {
 
 /* ── Filters ── */
 .crm-filters {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 12px;
     margin-bottom: 16px;
 }
 
-.crm-filters .crm-input { font-size: 0.875rem; padding: 7px 10px; }
+.crm-filters .crm-input {
+    width: 200px;
+    max-width: 100%;
+    flex: 0 1 200px;
+    font-size: 0.875rem;
+    padding: 7px 10px;
+}
+
+.crm-filters-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.crm-filters .crm-btn,
+.crm-filters-actions .crm-btn {
+    width: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
 
 /* ── Form Grid ── */
 .crm-form-grid {
