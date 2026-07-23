@@ -12,8 +12,12 @@ use App\Http\Controllers\Admin\QuotationController;
 use App\Http\Controllers\Admin\QuotationTermTemplateController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\TaskController;
+use App\Http\Controllers\Admin\UserActivityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Services\QuotationPdfService;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -120,6 +124,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/{user}', [UserController::class, 'destroy'])->middleware('permission:users.delete')->name('destroy');
     });
 
+    Route::prefix('user-activities')->name('user-activities.')->group(function () {
+        Route::get('/', [UserActivityController::class, 'index'])->name('index');
+        Route::get('/datatable', [UserActivityController::class, 'datatable'])->name('datatable');
+    });
+
     Route::prefix('roles')->name('roles.')->middleware('permission:roles.view')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('index');
         Route::get('/datatable', [RoleController::class, 'datatable'])->name('datatable');
@@ -149,6 +158,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/docs/user-manual', function (QuotationPdfService $quotationPdfService) {
+        $path = base_path('docs/Torq_CRM_User_Manual.pdf');
+
+        $pdf = Pdf::loadView('docs.user-manual', [
+            'company' => $quotationPdfService->companyProfile(),
+        ])->setPaper('a4', 'portrait');
+
+        $dompdf = $pdf->getDomPDF();
+        $dompdf->render();
+
+        $canvas = $dompdf->getCanvas();
+        $fontMetrics = $dompdf->getFontMetrics();
+        $font = $fontMetrics->getFont('DejaVu Sans');
+        $size = 9;
+        $sample = 'Page 0 of 0';
+        $width = $fontMetrics->getTextWidth($sample, $font, $size);
+        $x = ($canvas->get_width() - $width) / 2;
+        $y = $canvas->get_height() - 28;
+        $canvas->page_text($x, $y, 'Page {PAGE_NUM} of {PAGE_COUNT}', $font, $size, [0.4, 0.4, 0.4]);
+
+        File::ensureDirectoryExists(dirname($path));
+        File::put($path, $dompdf->output());
+
+        return response()->download($path, 'Torq_CRM_User_Manual.pdf');
+    })->name('docs.user-manual');
 });
 
 require __DIR__.'/auth.php';

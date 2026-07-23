@@ -47,6 +47,7 @@
                         <th data-sort="mobile" data-dir="asc">Mobile</th>
                         <th>Role</th>
                         <th data-sort="is_active" data-dir="asc">Status</th>
+                        <th data-sort="last_login_at" data-dir="desc">Last Login</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -153,9 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${row.mobile || '—'}</td>
                 <td>${roleLabel}</td>
                 <td><span class="crm-badge crm-badge-${row.is_active ? 'success' : 'secondary'}">${row.is_active ? 'Active' : 'Inactive'}</span></td>
+                <td style="white-space:nowrap;">${row.last_login_at || '—'}</td>
                 <td class="crm-action-menu">${canEdit ? `<button type="button" data-edit='${JSON.stringify(row).replace(/'/g,"&#39;")}' title="Edit"><i class="bi bi-pencil"></i></button>` : ''}${showDelete ? `<button type="button" data-delete="${row.id}" title="Delete"><i class="bi bi-trash"></i></button>` : ''}</td>
             </tr>`;
-        }).join('') || '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--crm-muted);">No users found</td></tr>';
+        }).join('') || '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--crm-muted);">No users found</td></tr>';
         document.getElementById('record-info').textContent = `Showing ${m.total ? (m.current_page-1)*m.per_page+1 : 0}-${Math.min(m.current_page*m.per_page,m.total)} of ${m.total} records`;
         document.getElementById('pagination').innerHTML = `<button ${m.current_page<=1?'disabled':''} data-page="${m.current_page-1}">&lsaquo;</button><span class="active">${m.current_page}</span><button ${m.current_page>=m.last_page?'disabled':''} data-page="${m.current_page+1}">&rsaquo;</button>`;
         currentPage = m.current_page;

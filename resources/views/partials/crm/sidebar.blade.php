@@ -108,7 +108,19 @@
                 <a href="{{ route('profile.edit') }}" class="crm-nav-link {{ request()->routeIs('profile.*') ? 'active' : '' }}" title="Settings">
                     <i class="bi bi-gear"></i><span class="crm-nav-label">Settings</span>
                 </a>
+                @if (auth()->user()?->isSuperAdmin())
+                    <a href="{{ route('user-activities.index') }}" class="crm-nav-link {{ request()->routeIs('user-activities.*') ? 'active' : '' }}" title="User Activity">
+                        <i class="bi bi-activity"></i><span class="crm-nav-label">User Activity</span>
+                    </a>
+                @endif
             </div>
         @endif
+
+        <div class="crm-nav-section">
+            <div class="crm-nav-section-title">Help</div>
+            <a href="{{ route('docs.user-manual') }}" class="crm-nav-link" title="User Manual PDF" target="_blank">
+                <i class="bi bi-file-earmark-pdf"></i><span class="crm-nav-label">User Manual</span>
+            </a>
+        </div>
     </nav>
 </aside>

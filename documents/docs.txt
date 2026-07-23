@@ -1,0 +1,1 @@
+php artisan docs:user-manual-pdf

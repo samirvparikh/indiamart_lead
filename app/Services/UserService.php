@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\RoleName;
 use App\Models\User;
+use App\Support\DatatableSort;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
@@ -38,8 +39,8 @@ class UserService
             $query->role($filters['role']);
         }
 
-        \App\Support\DatatableSort::apply($query, $filters, [
-            'id', 'username', 'first_name', 'last_name', 'email', 'mobile', 'is_active', 'created_at',
+        DatatableSort::apply($query, $filters, [
+            'id', 'username', 'first_name', 'last_name', 'email', 'mobile', 'is_active', 'last_login_at', 'created_at',
         ], 'id', 'desc');
 
         return $query->paginate($perPage);

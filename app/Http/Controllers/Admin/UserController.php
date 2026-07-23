@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\RoleName;
+use App\Enums\UserActivityType;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\UserActivityLogger;
 use App\Services\UserService;
 use App\Support\LoginIdentifier;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +21,7 @@ class UserController extends Controller
 {
     public function __construct(
         protected UserService $userService,
+        protected UserActivityLogger $activityLogger,
     ) {}
 
     public function index(): View
@@ -52,7 +55,8 @@ class UserController extends Controller
                 'is_active' => $user->is_active,
                 'role' => $user->primaryRoleName(),
                 'roles' => $user->roles->pluck('name'),
-                'last_login_at' => $user->last_login_at?->toDateTimeString(),
+                'last_login_at' => $user->last_login_at?->format('d M Y, h:i A'),
+                'last_login_at_raw' => $user->last_login_at?->toDateTimeString(),
                 'created_at' => $user->created_at?->toDateTimeString(),
             ];
         });
@@ -98,6 +102,18 @@ class UserController extends Controller
 
         $user = $this->userService->create($data);
 
+        $this->activityLogger->log(
+            UserActivityType::UserCreated,
+            $request->user(),
+            "Created user {$user->name} ({$user->username})",
+            [
+                'target_user_id' => $user->id,
+                'target_username' => $user->username,
+                'role' => $data['role'] ?? null,
+            ],
+            $request,
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'User created successfully.',
@@ -142,6 +158,20 @@ class UserController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
 
+        $this->activityLogger->log(
+            ! empty($data['password']) ? UserActivityType::PasswordChanged : UserActivityType::UserUpdated,
+            $request->user(),
+            ! empty($data['password'])
+                ? "Changed password for user {$user->name} ({$user->username})"
+                : "Updated user {$user->name} ({$user->username})",
+            [
+                'target_user_id' => $user->id,
+                'target_username' => $user->username,
+                'role' => $data['role'] ?? $user->primaryRoleName(),
+            ],
+            $request,
+        );
+
         return response()->json([
             'success' => true,
             'message' => 'User updated successfully.',
@@ -153,11 +183,25 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
+        $snapshot = [
+            'target_user_id' => $user->id,
+            'target_username' => $user->username,
+            'target_name' => $user->name,
+        ];
+
         try {
             $this->userService->delete($user);
         } catch (InvalidArgumentException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
         }
+
+        $this->activityLogger->log(
+            UserActivityType::UserDeleted,
+            $request->user(),
+            "Deleted user {$snapshot['target_name']} ({$snapshot['target_username']})",
+            $snapshot,
+            $request,
+        );
 
         return response()->json([
             'success' => true,

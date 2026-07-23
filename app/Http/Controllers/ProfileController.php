@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserActivityType;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Services\UserActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +13,10 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function __construct(
+        protected UserActivityLogger $activityLogger,
+    ) {}
+
     /**
      * Display the user's profile form.
      */
@@ -33,6 +39,14 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+
+        $this->activityLogger->log(
+            UserActivityType::ProfileUpdated,
+            $request->user(),
+            "{$request->user()->name} updated profile",
+            ['username' => $request->user()->username],
+            $request,
+        );
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
